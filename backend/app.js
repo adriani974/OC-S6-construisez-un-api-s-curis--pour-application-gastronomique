@@ -1,6 +1,18 @@
 //Importe express et export de l'application.
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
+const saucesRouter = require('./routes/sauces');
+const authentificationRouter = require('./routes/authentification');
+
+/********************************************************************************* */
+mongoose.connect('mongodb://localhost/Piiquante',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
+
+/************************************************************************************* */
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -35,6 +47,9 @@ app.use('/api/stuff', (req, res, next) => {
   ];
   res.status(200).json(stuff);
 });
+
+app.use('/api/sauces', saucesRouter);
+app.use('/api/auth', authentificationRouter);
 
 
 module.exports = app;
