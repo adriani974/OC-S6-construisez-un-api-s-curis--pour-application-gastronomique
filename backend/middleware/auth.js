@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
         const userId = decodedToken.userId;
         if (req.body.userId && req.body.userId !== userId) {
             console.log("userId n'est pas encore enregistrer");
-            throw 'Utilisateur non autorisé';
+            throw 'utilisateur n est pas enregistrer';
           } else {
             console.log(" userId est déjà enregistrer");
             next();
@@ -15,6 +15,6 @@ module.exports = (req, res, next) => {
    
     } catch(error) {
         res.status(401).json({ error });
-        console.log(" userId est déjà enregistrer");
+        console.log(" erreur, userId est déjà enregistrer");
     }
  };

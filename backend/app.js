@@ -19,6 +19,9 @@ mongoose.connect(process.env.MONGO_URL,
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 /************************************************************************************* */
+//app.use(helmet());
+app.use(express.json());
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -26,8 +29,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(helmet());
-app.use(express.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/sauces', saucesRouter);
 app.use('/api/auth', authentificationRouter);

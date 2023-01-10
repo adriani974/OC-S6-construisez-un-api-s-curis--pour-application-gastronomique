@@ -5,13 +5,14 @@ const fs = require('fs');
 exports.createSauce = (req, res, next) => {
   const sauceObj = JSON.parse(req.body.sauce);
   delete sauceObj._id;
+  delete sauceObj._userId;
   const sauce = new Sauce({
     userId: sauceObj.userId,
     name: sauceObj.name,
     manufacturer: sauceObj.manufacturer,
     description: sauceObj.description,
     mainPepper: sauceObj.mainPepper,
-    imageUrl: "${req.protocol}://${req.get('host')}/images/${ req.file.filename }",
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     heat: sauceObj.heat,
     likes: 0,
     dislikes: 0,
@@ -58,7 +59,7 @@ exports.updateSauce = (req, res, next) => {
     manufacturer: sauceObj.manufacturer,
     description: sauceObj.description,
     mainPepper: sauceObj.mainPepper,
-    imageUrl: "${req.protocol}://${req.get('host')}/images/${ req.file.filename }",
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     heat: sauceObj.heat,
   });
   Sauce.updateOne({_id: req.params.id}, sauce).then(
