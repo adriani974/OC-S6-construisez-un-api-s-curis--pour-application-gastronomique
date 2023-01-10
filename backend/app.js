@@ -11,6 +11,7 @@ dotenv.config();
 const app = express();
 
 /********************************************************************************* */
+//mongoose.set('strictQuery', false);
 mongoose.connect(process.env.MONGO_URL,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 });
 
 app.use(helmet());
+app.use(express.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/sauces', saucesRouter);
 app.use('/api/auth', authentificationRouter);
