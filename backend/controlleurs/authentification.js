@@ -1,14 +1,22 @@
 const Authentification = require('../modeles/authentification');
 const jwt = require('jsonwebtoken');
 const  argon2  = require('argon2');
-const email_validator = require('deep-email-validator');
+const email_validator = require('email-validator');
 
 exports.signup = (req, res, next) => {
     console.log("authentification -> email = "+ req.body.email);
     console.log("authentification -> password = "+ req.body.password);
     const checkEmail = email_validator.validate(req.body.email);
 
-    if(checkEmail){//l'email est valide
+    if(!checkEmail){//l'email est valide
+        console.log("authentification -> mail invalide ");
+        res.writeHead(400, {
+            "content-type": "application/json",
+          });
+        res.end("L'email entré est invalide !");
+
+    }else{//l'email est invalide
+        console.log("authentification -> mail valide ");
         argon2.hash(req.body.password)
         .then(hash => {
         const authentification = new Authentification({
@@ -20,12 +28,6 @@ exports.signup = (req, res, next) => {
             .catch(error => res.status(400).json({ error }));
         })
         .catch(error => res.status(400).json({ error }));
-
-    }else{//l'email est invalide
-        res.writeHead(400, {
-            "content-type": "application/json",
-          });
-        res.end("L'email entré est invalide !");
     }
     
 };
@@ -53,7 +55,7 @@ exports.login = (req, res, next) => {
                     )
                 });
             })
-            .catch(error => res.status(502).json({ message: 'Paire login/mot de passe incorrecte'+error }));
+            .catch(error => res.status(500).json({ message: 'Paire login/mot de passe incorrecte'+error }));
     })
-    .catch(error => res.status(503).json({ message: 'Paire login/mot de passe incorrecte'+error }));
+    .catch(error => res.status(500).json({ message: 'Paire login/mot de passe incorrecte'+error }));
 };
