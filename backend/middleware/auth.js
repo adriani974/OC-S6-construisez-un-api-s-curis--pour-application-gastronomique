@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-
+//Ce middleware permet de sécuriser les routes afin que seul l'utilisateur authentifier puissent y acceder
 module.exports = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1];

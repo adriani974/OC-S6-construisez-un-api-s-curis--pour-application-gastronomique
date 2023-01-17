@@ -52,7 +52,6 @@ exports.updateSauce = (req, res, next) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   } : { ...req.body };
 
-
   delete sauceObject._userId;
   Sauce.findOne({_id: req.params.id})
       .then((sauce) => {
@@ -106,11 +105,11 @@ exports.getAllSauces = (req, res, next) => {
   );
 };
 
+//Ajoute un like ou un dislike à une sauce
 exports.likeSauce = (req, res, next) => {
   const like = req.body.like;
   const userId = req.auth.userId;  
-  console.log("sauces -> likeSauce = req.body.userId: "+req.body.userId+" req.auth.userId: "+req.auth.userId); 
-  console.log("sauces -> likeSauce = req.body.like: "+req.body.like); 
+ 
   if(like === 1){
      
     Sauce.updateOne(
@@ -119,7 +118,7 @@ exports.likeSauce = (req, res, next) => {
         $inc: { likes: 1 },
         $push: { usersLiked: userId }
       }
-    ).then(() => res.status(200).json({ message: "aime" }))
+    ).then(() => res.status(200).json({ message: "j'aime la sauce" }))
     .catch((error) => res.status(500).json({ error }));
 
   }else if(like === -1){
@@ -130,12 +129,13 @@ exports.likeSauce = (req, res, next) => {
         $inc: { dislikes: 1 },
         $push: { usersDisliked: userId }
       }
-    ).then(() => res.status(200).json({ message: "aime pas" }))
+    ).then(() => res.status(200).json({ message: "j'aime pas la sauce" }))
     .catch((error) => res.status(500).json({ error }));
 
   }else if(like === 0){
     Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
+      //si l'utilisateur est enregistrer dans le tableau userLiked
       if(sauce.usersLiked.includes(userId)){
 
         Sauce.updateOne(
@@ -144,10 +144,11 @@ exports.likeSauce = (req, res, next) => {
             $inc: { likes: -1 },
             $pull: { usersLiked: userId }
           }
-        ).then(() => res.status(200).json({ message: "utilisateur supprimé" })    
+        ).then(() => res.status(200).json({ message: "utilisateur supprimé de l'array" })    
         ).catch((error) => res.status(500).json({ error }));
       }
 
+      //si l'utilisateur est enregistrer dans le tableau userDisliked
       if(sauce.usersDisliked.includes(userId)){
 
         Sauce.updateOne(
@@ -156,10 +157,9 @@ exports.likeSauce = (req, res, next) => {
             $inc: { dislikes: -1 },
             $pull: { usersDisliked: userId }
           }
-        ).then(() => res.status(200).json({ message: "aime pas" })    
+        ).then(() => res.status(200).json({ message: "utilisateur supprimé de l'array" })    
         ).catch((error) => res.status(500).json({ error }));
       }
-
 
     }).catch((error) => res.status(500).json({ error }));
   }  

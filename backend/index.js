@@ -3,8 +3,9 @@ const app = require('./app');
 const dotenv = require("dotenv");
 dotenv.config();
 
-const MY_PORT = process.env.PORT;
+
 /***************************************************************************************** */
+const MY_PORT = process.env.PORT;
 
 const normalizePort = val => {
   const port = parseInt(val, 10);
@@ -17,7 +18,7 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT);
 app.set('port', port);
 
 //cherche différent erreur
@@ -47,7 +48,6 @@ server.on('error', errorHandler);
 server.on('listening', () => {
   const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-  console.log('Listening on ' + bind);
 });
 
 server.listen(MY_PORT, () => console.log(`Server running on port ${MY_PORT}`));

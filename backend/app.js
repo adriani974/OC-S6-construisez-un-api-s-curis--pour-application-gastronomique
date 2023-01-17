@@ -5,8 +5,7 @@ const path = require('path');
 const saucesRouter = require('./routes/sauces');
 const authentificationRouter = require('./routes/authentification');
 const dotenv = require("dotenv");
-const helmet = require('helmet');
-
+const sanitize = require('express-mongo-sanitize');
 dotenv.config();
 const app = express();
 
@@ -19,8 +18,8 @@ mongoose.connect(process.env.MONGO_URL,
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 /************************************************************************************* */
-//app.use(helmet());
 app.use(express.json());
+app.use(sanitize());
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
