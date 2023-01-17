@@ -6,6 +6,7 @@ const saucesRouter = require('./routes/sauces');
 const authentificationRouter = require('./routes/authentification');
 const dotenv = require("dotenv");
 const sanitize = require('express-mongo-sanitize');
+const xssClean = require('xss-clean');
 dotenv.config();
 const app = express();
 
@@ -20,6 +21,7 @@ mongoose.connect(process.env.MONGO_URL,
 /************************************************************************************* */
 app.use(express.json());
 app.use(sanitize());
+app.use(xssClean());
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
