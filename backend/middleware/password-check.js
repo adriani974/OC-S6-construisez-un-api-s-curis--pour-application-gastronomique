@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
   if(passwordCheck.validate(req.body.password)){
           next();
       }else{
-          res.writeHead(400,"Le mot de passe doit être composé d'au moins 8 caractères incluant, un minuscule, un majuscule, deux chiffres et aucun espace",
+          res.writeHead(400,"Un mot de passe doit être composé d'au moins 8 caractères incluant, un minuscule, un majuscule, un symbole, deux chiffres et aucun espace",
             {
               "content-type": "application/json",
             });
